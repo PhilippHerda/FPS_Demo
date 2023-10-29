@@ -9,6 +9,8 @@ public class PlayerMovementScript : MonoBehaviour
     public float speed = 10f;
     public float gravity = -19.62f;
     public float jumpHeight = 1.5f;
+    public float dashSpeed;
+    public float dashTime;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -17,8 +19,6 @@ public class PlayerMovementScript : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
     bool hasAirJumped = false;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -58,5 +58,22 @@ public class PlayerMovementScript : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            StartCoroutine(Dash());
+        }
+    }
+
+    IEnumerator Dash()
+    {
+        float startTime = Time.time;
+
+        while(Time.time < startTime + dashTime)
+        {
+            controller.Move(transform.forward * dashSpeed * Time.deltaTime);
+
+            yield return null;
+        }
     }
 }
