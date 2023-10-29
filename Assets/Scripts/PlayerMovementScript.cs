@@ -14,6 +14,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float maxGrappleDistance;
     public float grappleDelayTime;
     public float grapplingCoolDown;
+    public float overshootYAxis;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -23,6 +24,7 @@ public class PlayerMovementScript : MonoBehaviour
     public LayerMask grappleMask;
     public KeyCode grappleKey = KeyCode.Mouse1;
     public LineRenderer lineRenderer;
+    public Rigidbody rigidBody;
 
     private Vector3 velocity;
     private Vector3 grapplePoint;
@@ -30,6 +32,7 @@ public class PlayerMovementScript : MonoBehaviour
     private bool isGrounded;
     private bool hasAirJumped = false;
     private bool isGrappling;
+    private bool isFrozen;
 
     // Start is called before the first frame update
     void Start()
@@ -50,9 +53,17 @@ public class PlayerMovementScript : MonoBehaviour
             hasAirJumped = false;
         }
 
+        if(isGrounded && isGrappling) rigidBody.drag = 0;
+        if(isGrappling) return;
+
         if(isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
+        }
+
+        if(isFrozen)
+        {
+            rigidBody.velocity = Vector3.zero;
         }
 
         // WASD Movement
@@ -105,11 +116,13 @@ public class PlayerMovementScript : MonoBehaviour
         }
     }
 
-    private void StartGrapple()
+    public void StartGrapple()
     {
         if(grapplingCoolDownTimer > 0) return;
 
         isGrappling = true;
+
+        isFrozen = true;
 
         RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, grappleMask))
@@ -131,14 +144,57 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void ExecuteGrapple()
     {
+        isFrozen = false;
+
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y -1f, transform.position.z);
+
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
+
+        if(grapplePointRelativeYPos < 0)
+        {
+            highestPointOnArc = overshootYAxis;
+        }
+
+        JumpToPosition(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1f);
     }
 
     private void StopGrapple()
     {
+        isFrozen = false;
+
         isGrappling = false;
 
         grapplingCoolDownTimer = grapplingCoolDown;
 
         lineRenderer.enabled = false;
+    }
+
+    private Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
+
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        // isGrappling = true;
+
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+    }
+
+    private Vector3 velocityToSet;
+    private void SetVelocity()
+    {
+        rigidBody.velocity = velocityToSet;
     }
 }
