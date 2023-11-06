@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     public float airMultiplier;
     bool readyToJump;
 
+    [Header("Dash")]
+    public float dashTime;
+
     [Header("Key Bindings")]
     public KeyCode jumpKey = KeyCode.Space;
 
@@ -46,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // ground check via raycast
         // grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f * 0.2f, groundLayerMask);
-        grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayerMask); 
+        grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayerMask);
 
         PlayerInput();
         SpeedControl();
@@ -77,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
+        // dash
+        if (Input.GetKeyDown(KeyCode.LeftShift)) StartCoroutine(Dash());
     }
 
     private void MovePlayer()
@@ -86,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
         // ground
         if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-        else if(!grounded) // in air
+        else if (!grounded) // in air
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
     }
@@ -114,5 +120,17 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    IEnumerator Dash()
+    {
+        float startTime = Time.time;
+
+        while (Time.time < startTime + dashTime)
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Impulse);
+
+            yield return null;
+        }
     }
 }

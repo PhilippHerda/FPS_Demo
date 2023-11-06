@@ -26,7 +26,7 @@ public class PlayerMovementScript : MonoBehaviour
     public LineRenderer lineRenderer;
     public Rigidbody rigidBody;
 
-    private Vector3 velocity;
+    public Vector3 velocity;
     private Vector3 grapplePoint;
     private float grapplingCoolDownTimer;
     private bool isGrounded;
@@ -37,7 +37,7 @@ public class PlayerMovementScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -48,20 +48,20 @@ public class PlayerMovementScript : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if(isGrounded)
+        if (isGrounded)
         {
             hasAirJumped = false;
         }
 
-        if(isGrounded && isGrappling) rigidBody.drag = 0;
-        if(isGrappling) return;
+        if (isGrounded && isGrappling) rigidBody.drag = 0;
+        if (isGrappling) return;
 
-        if(isGrounded && velocity.y < 0)
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
 
-        if(isFrozen)
+        if (isFrozen)
         {
             rigidBody.velocity = Vector3.zero;
         }
@@ -75,19 +75,19 @@ public class PlayerMovementScript : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         // DoubleJump
-        if(Input.GetButtonDown("Jump") && (isGrounded || !hasAirJumped)) StartCoroutine(DoubleJump());
+        if (Input.GetButtonDown("Jump") && (isGrounded || !hasAirJumped)) StartCoroutine(DoubleJump());
 
         // Dash
-        if(Input.GetKeyDown(KeyCode.LeftShift)) StartCoroutine(Dash());
+        if (Input.GetKeyDown(KeyCode.LeftShift)) StartCoroutine(Dash());
 
         // Grapple
-        if(grapplingCoolDownTimer > 0) grapplingCoolDownTimer -= Time.deltaTime;
-        if(Input.GetKeyDown(grappleKey)) StartGrapple();
+        if (grapplingCoolDownTimer > 0) grapplingCoolDownTimer -= Time.deltaTime;
+        if (Input.GetKeyDown(grappleKey)) StartGrapple();
     }
 
     private void LateUpdate()
     {
-        if(isGrappling)
+        if (isGrappling)
         {
             lineRenderer.SetPosition(0, gunTip.position);
         }
@@ -95,7 +95,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     IEnumerator DoubleJump()
     {
-        if(!isGrounded)
+        if (!isGrounded)
         {
             hasAirJumped = true;
         }
@@ -108,7 +108,7 @@ public class PlayerMovementScript : MonoBehaviour
     {
         float startTime = Time.time;
 
-        while(Time.time < startTime + dashTime)
+        while (Time.time < startTime + dashTime)
         {
             controller.Move(transform.forward * dashSpeed * Time.deltaTime);
 
@@ -118,14 +118,14 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void StartGrapple()
     {
-        if(grapplingCoolDownTimer > 0) return;
+        if (grapplingCoolDownTimer > 0) return;
 
         isGrappling = true;
 
         isFrozen = true;
 
         RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, grappleMask))
+        if (Physics.Raycast(cam.position, cam.forward, out hit, maxGrappleDistance, grappleMask))
         {
             grapplePoint = hit.point;
 
@@ -146,12 +146,12 @@ public class PlayerMovementScript : MonoBehaviour
     {
         isFrozen = false;
 
-        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y -1f, transform.position.z);
+        Vector3 lowestPoint = new Vector3(transform.position.x, transform.position.y - 1f, transform.position.z);
 
         float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
         float highestPointOnArc = grapplePointRelativeYPos + overshootYAxis;
 
-        if(grapplePointRelativeYPos < 0)
+        if (grapplePointRelativeYPos < 0)
         {
             highestPointOnArc = overshootYAxis;
         }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -182,7 +182,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 297052939}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -736,7 +736,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602430109}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3316,8 +3316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a3fc58bbe649b141b3599e8d5e0f5c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivityX: 250
-  sensitivityY: 250
+  sensitivityX: 400
+  sensitivityY: 400
   orientation: {fileID: 940814010}
 --- !u!43 &1043450371
 Mesh:
@@ -3497,7 +3497,7 @@ GameObject:
   - component: {fileID: 1099846959}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3510,8 +3510,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1099846956}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.665, y: 1.95, z: 24.168}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: -0.00000061094755}
+  m_LocalPosition: {x: 17.665, y: 1.972, z: 24.168}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3520,7 +3520,7 @@ Transform:
   - {fileID: 574138045}
   - {fileID: 813842662}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!54 &1099846958
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3562,9 +3562,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 7
   groundDrag: 5
-  jumpForce: 9
+  jumpForce: 7
   jumpCooldown: 0.25
   airMultiplier: 0.4
+  dashTime: 0.25
   jumpKey: 32
   playerHeight: 2
   groundLayerMask:
@@ -3736,7 +3737,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293383508}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5724,7 +5725,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365661006}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -43828,7 +43829,7 @@ Transform:
   m_GameObject: {fileID: 1365661006}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.847504, y: 18.222977, z: -11.637681}
+  m_LocalPosition: {x: 14.847504, y: 18.22, z: -11.637681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43935,6 +43936,7 @@ MonoBehaviour:
   grappleKey: 324
   lineRenderer: {fileID: 0}
   rigidBody: {fileID: 1501867478}
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!54 &1501867478
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -44095,7 +44097,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1600934890}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -82634,7 +82636,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824416087}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -84539,7 +84541,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833071866}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8a18e829020754f109688404836d83c1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -86639,6 +86641,7 @@ GameObject:
   - component: {fileID: 2017816414}
   - component: {fileID: 2017816413}
   - component: {fileID: 2017816412}
+  - component: {fileID: 2017816416}
   m_Layer: 0
   m_Name: Trampoline
   m_TagString: Untagged
@@ -86733,6 +86736,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1365661012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2017816416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017816411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1916a517252264281be1aeae49482ccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &2132783785
 Mesh:
   m_ObjectHideFlags: 0
