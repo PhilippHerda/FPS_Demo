@@ -16,14 +16,14 @@ public class TrampolineBehaviour : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (other.transform.CompareTag("Player"))
         {
             GameObject player = other.gameObject;
 
             //player.GetComponent<PlayerMovement>().velocity += Vector3.up;
-            player.GetComponent<Rigidbody>().AddForce(Vector3.up * 100f, ForceMode.Force); ;
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * 900f, ForceMode.Acceleration); ;
             //rb.AddForce(Vector3.up * 100f, ForceMode.Force);
         }
     }

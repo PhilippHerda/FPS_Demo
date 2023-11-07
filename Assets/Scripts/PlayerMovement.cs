@@ -84,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+        // air jump
         else if (Input.GetKey(jumpKey) && readyToJump && !hasAirJumped)
         {
             readyToJump = false;
@@ -123,9 +124,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // limit vertical velocity
-        if (vertVelocity.magnitude > moveSpeed)
+        if (vertVelocity.magnitude > moveSpeed * 2f)
         {
-            Vector3 limitedVelocity = vertVelocity.normalized * moveSpeed;
+            Vector3 limitedVelocity = vertVelocity.normalized * 0.8f;
             rb.velocity = new Vector3(rb.velocity.x, limitedVelocity.y, rb.velocity.z);
         }
     }
@@ -149,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
 
         while (Time.time < startTime + dashTime)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Impulse);
+            rb.AddForce(moveDirection.normalized * moveSpeed * 2f, ForceMode.Impulse);
 
             yield return null;
         }
