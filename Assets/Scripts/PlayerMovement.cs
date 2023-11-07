@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     bool readyToJump;
+    bool hasAirJumped;
 
     [Header("Dash")]
     public float dashTime;
@@ -54,9 +55,12 @@ public class PlayerMovement : MonoBehaviour
         PlayerInput();
         SpeedControl();
 
-        // apply drag
+        // apply drag & reset air jump
         if (grounded)
+        {
             rb.drag = groundDrag;
+            hasAirJumped = false;
+        }
         else
             rb.drag = 0;
     }
@@ -75,6 +79,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        else if (Input.GetKey(jumpKey) && readyToJump && !hasAirJumped)
+        {
+            readyToJump = false;
+            hasAirJumped = true;
 
             Jump();
 
@@ -100,12 +113,20 @@ public class PlayerMovement : MonoBehaviour
     private void SpeedControl()
     {
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 vertVelocity = new Vector3(0f, rb.velocity.y, 0f);
 
-        // limit velocity
+        // limit flat velocity
         if (flatVelocity.magnitude > moveSpeed)
         {
             Vector3 limitedVelocity = flatVelocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
+        }
+
+        // limit vertical velocity
+        if (vertVelocity.magnitude > moveSpeed)
+        {
+            Vector3 limitedVelocity = vertVelocity.normalized * moveSpeed;
+            rb.velocity = new Vector3(rb.velocity.x, limitedVelocity.y, rb.velocity.z);
         }
     }
 
