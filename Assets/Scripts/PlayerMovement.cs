@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     public float airMultiplier;
     bool readyToJump;
     bool hasAirJumped;
+    public bool isFrozen;
+    bool activeGrapple;
+    bool enableMovementOnNextTouch;
 
     [Header("Dash")]
     public float dashTime;
@@ -34,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
     float verticalInput;
 
     Vector3 moveDirection;
+    private Vector3 velocityToSet;
+
 
     Rigidbody rb;
 
@@ -56,13 +61,18 @@ public class PlayerMovement : MonoBehaviour
         SpeedControl();
 
         // apply drag & reset air jump
-        if (grounded)
+        if (grounded && !activeGrapple)
         {
             rb.drag = groundDrag;
             hasAirJumped = false;
         }
         else
             rb.drag = 0;
+
+        if (isFrozen)
+        {
+            rb.velocity = Vector3.zero;
+        }
     }
 
     private void FixedUpdate()
@@ -101,6 +111,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (activeGrapple) return;
+
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
         // ground
@@ -113,6 +125,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpeedControl()
     {
+        if (activeGrapple) return;
+
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         Vector3 vertVelocity = new Vector3(0f, rb.velocity.y, 0f);
 
@@ -154,5 +168,49 @@ public class PlayerMovement : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
+    }
+
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        activeGrapple = true;
+
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        Invoke(nameof(ResetRestictions), 3f);
+    }
+    
+    private void SetVelocity()
+    {
+        enableMovementOnNextTouch = true;
+        rb.velocity = velocityToSet;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+            ResetRestictions();
+
+            GetComponent<Grappling>().StopGrapple();
+        }
+    }
+
+    public void ResetRestictions()
+    {
+        activeGrapple = false;
     }
 }
