@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float dashCoefficient;
     bool readyToJump;
     bool hasAirJumped;
     public bool isFrozen;
@@ -128,20 +129,12 @@ public class PlayerMovement : MonoBehaviour
         if (activeGrapple) return;
 
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        Vector3 vertVelocity = new Vector3(0f, rb.velocity.y, 0f);
 
         // limit flat velocity
         if (flatVelocity.magnitude > moveSpeed)
         {
             Vector3 limitedVelocity = flatVelocity.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
-        }
-
-        // limit vertical velocity
-        if (vertVelocity.magnitude > moveSpeed * 2f)
-        {
-            Vector3 limitedVelocity = vertVelocity.normalized * 0.8f;
-            rb.velocity = new Vector3(rb.velocity.x, limitedVelocity.y, rb.velocity.z);
         }
     }
 
@@ -164,7 +157,7 @@ public class PlayerMovement : MonoBehaviour
 
         while (Time.time < startTime + dashTime)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 2f, ForceMode.Impulse);
+            rb.AddForce(moveDirection.normalized * dashCoefficient, ForceMode.Impulse);
 
             yield return null;
         }
