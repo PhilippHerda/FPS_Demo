@@ -23,7 +23,7 @@ public class TrampolineBehaviour : MonoBehaviour
             GameObject player = other.gameObject;
 
             //player.GetComponent<PlayerMovement>().velocity += Vector3.up;
-            player.GetComponent<Rigidbody>().AddForce(Vector3.up * 900f, ForceMode.Acceleration); ;
+            player.GetComponent<Rigidbody>().AddForce(Vector3.up * 800f, ForceMode.Acceleration);
             //rb.AddForce(Vector3.up * 100f, ForceMode.Force);
         }
     }
