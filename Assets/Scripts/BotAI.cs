@@ -12,6 +12,7 @@ public class BotAI : MonoBehaviour
     public LayerMask isGround, isPlayer;
 
     public float health;
+    Animator animator;
 
     // Patrolling
     public Vector3 walkPoint;
@@ -31,6 +32,7 @@ public class BotAI : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
@@ -52,10 +54,14 @@ public class BotAI : MonoBehaviour
 
     private void Patrolling()
     {
+        animator.SetBool("isIdle", false);
+
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet)
             agent.SetDestination(walkPoint);
+
+        animator.SetBool("isWalking", true);
         
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
@@ -76,17 +82,25 @@ public class BotAI : MonoBehaviour
 
     private void ChasePlayer()
     {
+        animator.SetBool("isIdle", false);
+
         agent.SetDestination(player.position);
+        // TODO: perhaps add running for chasing later on
+        animator.SetBool("isWalking", true);
     }
 
     private void AttackPlayer()
     {
+        animator.SetBool("isIdle", false);
+        animator.SetBool("isWalking", false);
+
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        transform.LookAt(new Vector3(player.position.x, player.position.y - 1f, player.position.z));
 
         if (!alreadyAttacked)
         {
+            animator.SetBool("isShooting", true);
             // attack code
             Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
 
@@ -97,11 +111,23 @@ public class BotAI : MonoBehaviour
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
+
+        if (!alreadyAttacked)
+        {
+            animator.SetBool("isIdle", true);
+            // Invoke(nameof(ResetIdle), timeBetweenAttacks);
+        }
     }
 
     private void ResetAttack()
     {
+        animator.SetBool("isShooting", false);
         alreadyAttacked = false;
+    }
+
+    private void ResetIdle()
+    {
+        animator.SetBool("isIdle", false);
     }
 
     public void TakeDamage(int damage)
