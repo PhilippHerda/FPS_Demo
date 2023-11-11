@@ -6,9 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-
+    public float walkSpeed;
+    public float wallrunSpeed;
     public float groundDrag;
-
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isFrozen;
     bool activeGrapple;
     bool enableMovementOnNextTouch;
+
 
     [Header("Dash")]
     public float dashTime;
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     bool grounded;
+    public bool wallrunning;
 
     public Transform orientation;
     float horizontalInput;
@@ -42,6 +44,28 @@ public class PlayerMovement : MonoBehaviour
 
 
     Rigidbody rb;
+
+    public MovementState state;
+    public enum MovementState
+    {
+        walking,
+        wallrunning,
+        air
+    }
+
+    private void StateHandler()
+    {
+        if (wallrunning)
+        {
+            state = MovementState.wallrunning;
+            moveSpeed = wallrunSpeed;
+        }
+        else if (grounded)
+        {
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
 
         PlayerInput();
         SpeedControl();
+        StateHandler();
 
         // apply drag & reset air jump
         if (grounded && !activeGrapple)
@@ -107,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // dash
-        if (Input.GetKeyDown(KeyCode.LeftShift)) StartCoroutine(Dash());
+        if (Input.GetKeyDown(KeyCode.Q)) StartCoroutine(Dash());
     }
 
     private void MovePlayer()
