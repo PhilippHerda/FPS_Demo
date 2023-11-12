@@ -83,6 +83,7 @@ public class BotAI : MonoBehaviour
     private void ChasePlayer()
     {
         animator.SetBool("isIdle", false);
+        animator.SetBool("isShooting", false);
 
         agent.SetDestination(player.position);
         // TODO: perhaps add running for chasing later on
