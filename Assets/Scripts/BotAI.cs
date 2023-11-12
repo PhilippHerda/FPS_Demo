@@ -28,12 +28,14 @@ public class BotAI : MonoBehaviour
     // States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
+    bool isHitLocked;
 
     private void Awake()
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        isHitLocked = false;
     }
 
     // Update is called once per frame
@@ -42,9 +44,12 @@ public class BotAI : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, isPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, isPlayer);
 
-        if (!playerInSightRange && !playerInAttackRange) Patrolling();
-        if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-        if (playerInSightRange && playerInAttackRange) AttackPlayer();
+        if (!isHitLocked)
+        {
+            if (!playerInSightRange && !playerInAttackRange) Patrolling();
+            if (playerInSightRange && !playerInAttackRange) ChasePlayer();
+            if (playerInSightRange && playerInAttackRange) AttackPlayer();
+        }
     }
 
     private void Patrolling()
@@ -119,16 +124,25 @@ public class BotAI : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    private void ResetIdle()
-    {
-        animator.SetBool("isIdle", false);
-    }
-
     public void TakeDamage(int damage)
     {
         health -= damage;
+
+        if (health > 0)
+        {
+            isHitLocked = true;
+            animator.SetBool("isGettingHit", true);
+            transform.LookAt(new Vector3(player.position.x, player.position.y - 1f, player.position.z));
+            Invoke(nameof(ResetHitLock), 4.6f);
+        }
         
         if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+    }
+
+    private void ResetHitLock()
+    {
+        //animator.SetBool("isGettingHit", false);
+        isHitLocked = false;
     }
 
     private void  DestroyEnemy()
