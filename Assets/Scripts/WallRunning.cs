@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WallRunning : MonoBehaviour
 {
-    // Script source: https://www.youtube.com/watch?v=gNt9wBOrQO4
+    // Modified script from source: https://www.youtube.com/watch?v=gNt9wBOrQO4
 
     [Header("Wallrunning")]
     public LayerMask whatIsWall;

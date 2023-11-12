@@ -8,6 +8,7 @@ public class BotAI : MonoBehaviour
     public NavMeshAgent agent;
 
     public Transform player;
+    public Transform gunpoint;
 
     public LayerMask isGround, isPlayer;
 
@@ -97,7 +98,7 @@ public class BotAI : MonoBehaviour
         {
             animator.SetBool("isShooting", true);
             // attack code
-            Rigidbody rb = Instantiate(projectile, transform.position + new Vector3(0f, 1.1f, 0f), Quaternion.identity).GetComponent<Rigidbody>();
+            Rigidbody rb = Instantiate(projectile, gunpoint.position, Quaternion.identity).GetComponent<Rigidbody>();
 
             rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
 
