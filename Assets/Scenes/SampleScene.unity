@@ -91476,10 +91476,10 @@ MonoBehaviour:
   health: 10
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 5
-  timeBetweenAttacks: 1
-  projectile: {fileID: 0}
+  timeBetweenAttacks: 1.7
+  projectile: {fileID: 6096853547334558070, guid: 6ed404e3480f4424b939d3fd7d991406, type: 3}
   sightRange: 15
-  attackRange: 4
+  attackRange: 6
   playerInSightRange: 0
   playerInAttackRange: 0
 --- !u!195 &1709873420
