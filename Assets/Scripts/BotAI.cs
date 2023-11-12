@@ -8,6 +8,7 @@ public class BotAI : MonoBehaviour
     public NavMeshAgent agent;
 
     public Transform player;
+    public Transform gunpoint;
 
     public LayerMask isGround, isPlayer;
 
@@ -33,12 +34,6 @@ public class BotAI : MonoBehaviour
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
     }
 
     // Update is called once per frame
@@ -103,11 +98,9 @@ public class BotAI : MonoBehaviour
         {
             animator.SetBool("isShooting", true);
             // attack code
-            Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+            Rigidbody rb = Instantiate(projectile, gunpoint.position, Quaternion.identity).GetComponent<Rigidbody>();
 
             rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8f, ForceMode.Impulse);
-            //
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);

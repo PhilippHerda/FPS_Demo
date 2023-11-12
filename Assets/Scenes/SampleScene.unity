@@ -263,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 232895384}
   player: {fileID: 1099846957}
+  gunpoint: {fileID: 0}
   isGround:
     serializedVersion: 2
     m_Bits: 64
@@ -8854,6 +8855,7 @@ GameObject:
   - component: {fileID: 1099846959}
   - component: {fileID: 1099846960}
   - component: {fileID: 1099846961}
+  - component: {fileID: 1099846962}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -8988,6 +8990,35 @@ MonoBehaviour:
   wallCheckDistance: 0.7
   minJumpHeight: 2
   orientation: {fileID: 940814010}
+--- !u!114 &1099846962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099846956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fa464e372f50e94a91f34f9c4cedf32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 6096853547334558070, guid: 6ed404e3480f4424b939d3fd7d991406, type: 3}
+  shootForce: 32
+  upwardForce: 0
+  timeBetweenShooting: 0.2
+  spread: 0
+  reloadTime: 0
+  timeBetweenShots: 0.2
+  magazineSize: 100
+  bulletsPerTap: 1
+  allowButtonHold: 1
+  playerRb: {fileID: 1099846958}
+  recoilForce: 0
+  fpsCam: {fileID: 963194227}
+  attackPoint: {fileID: 1407709763}
+  muzzleFlash: {fileID: 0}
+  ammunitionDisplay: {fileID: 0}
+  allowInvoke: 1
 --- !u!1 &1151631756
 GameObject:
   m_ObjectHideFlags: 0
@@ -50262,6 +50293,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ethan
       objectReference: {fileID: 0}
+    - target: {fileID: 100168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 400168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.25
@@ -50336,7 +50371,10 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: e294f3329481aba4f87990bee6979aa1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400170, guid: b235179bd2a63d1468dd430670338c55, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2145278801}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
       insertIndex: -1
@@ -50344,6 +50382,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1709873419}
+    - targetCorrespondingSourceObject: {fileID: 100168, guid: b235179bd2a63d1468dd430670338c55, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1709873423}
   m_SourcePrefab: {fileID: 100100000, guid: b235179bd2a63d1468dd430670338c55, type: 3}
 --- !u!1 &1501867474
 GameObject:
@@ -91467,19 +91508,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1709873420}
   player: {fileID: 1099846957}
+  gunpoint: {fileID: 2145278801}
   isGround:
     serializedVersion: 2
     m_Bits: 64
   isPlayer:
     serializedVersion: 2
     m_Bits: 128
-  health: 10
+  health: 3
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 5
-  timeBetweenAttacks: 1
-  projectile: {fileID: 0}
+  timeBetweenAttacks: 1.5
+  projectile: {fileID: 6096853547334558070, guid: 6ed404e3480f4424b939d3fd7d991406, type: 3}
   sightRange: 15
-  attackRange: 4
+  attackRange: 6
   playerInSightRange: 0
   playerInAttackRange: 0
 --- !u!195 &1709873420
@@ -91504,6 +91546,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &1709873423
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709873416}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Height: 1.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.75, z: -0.1}
 --- !u!43 &1765440550
 Mesh:
   m_ObjectHideFlags: 0
@@ -96183,6 +96248,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1365661012}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!4 &1927834914 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400170, guid: b235179bd2a63d1468dd430670338c55, type: 3}
+  m_PrefabInstance: {fileID: 1450522387}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1929517797
 GameObject:
   m_ObjectHideFlags: 0
@@ -97681,6 +97751,37 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &2145278800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2145278801}
+  m_Layer: 0
+  m_Name: Gunpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2145278801
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145278800}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.072, z: 0.465}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1927834914}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
